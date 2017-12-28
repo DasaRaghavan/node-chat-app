@@ -12,10 +12,10 @@ socket.on('connect', function () {
 //   scheduleTime: 123
 // });
 
-socket.emit('createMessage', {
-  to: 'messageServer@example.com',
-  text: 'emit new createMessage event from client',
-});
+// socket.emit('createMessage', {
+//   to: 'messageServer@example.com',
+//   text: 'emit new createMessage event from client',
+// });
 
 socket.on('newMessage', function (msg) {
   console.log('Message from server', msg);

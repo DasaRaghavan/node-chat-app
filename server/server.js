@@ -29,19 +29,17 @@ io.on('connection', (socket) => {
 
   socket.on('createMessage', (data) => {
     var message = {
+
+    }
+    console.log('createMessage event fired by client', message );
+    io.emit('newMessage', {
       to: data.to,
       text: data.text,
       createdAt: new Date().getTime()
-    }
-    // console.log('createMessage event fired by client', message );
-    socket.emit('newMessage', message);
+    });
+
   });
-
-
-
 });
-
-
 
 server.listen(port, () => {
   console.log(`Server started on port ${port}`);
