@@ -15,9 +15,17 @@ app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
   console.log('New user connected');
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
+
+  var newUserWelcomeMessage = {
+    text: 'Welcome to the chat app'
+  };
+  var newUserBroadcastMessage = {
+    text: 'New User Joined'
+  };
+
+  socket.emit('newUser', newUserWelcomeMessage);
+  socket.broadcast.emit('newUser', newUserBroadcastMessage);
+
   // socket.emit('newEmail', {
   //     from: 'test@example.com',
   //     sub: 'emit newEmail event from server',
@@ -27,17 +35,24 @@ io.on('connection', (socket) => {
   //   console.log('createEmail event fired by client', data);
   // });
 
+  //
+  // socket.on('connect', () => {
+  //
+  // });
+
   socket.on('createMessage', (data) => {
     var message = {
-
-    }
-    console.log('createMessage event fired by client', message );
-    io.emit('newMessage', {
       to: data.to,
       text: data.text,
       createdAt: new Date().getTime()
-    });
+    };
 
+    console.log('createMessage event fired by client', message );
+    io.emit('newMessage', message);
+    // socket.broadcast.emit('newMessage', message);
+  });
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
   });
 });
 

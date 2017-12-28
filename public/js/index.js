@@ -1,6 +1,7 @@
 var socket = io();
 socket.on('connect', function () {
   console.log('Connected to server');
+
 });
 // socket.on('newEmail', function(data) {
 //   console.log('newEmail event received from server', data);
@@ -16,6 +17,10 @@ socket.on('connect', function () {
 //   to: 'messageServer@example.com',
 //   text: 'emit new createMessage event from client',
 // });
+
+socket.on('newUser', function (msg) {
+  console.log('Message from server', msg);
+});
 
 socket.on('newMessage', function (msg) {
   console.log('Message from server', msg);
