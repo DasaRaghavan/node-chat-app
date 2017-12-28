@@ -20,8 +20,8 @@ io.on('connection', (socket) => {
   // console.log(newUserWelcomeMessage);
   var newUserWelcomeMessage = generateMessage('Admin', 'Welcome to the chat app');
   var newUserBroadcastMessage = generateMessage('Admin', 'New user joined');
-  socket.emit('newUser', newUserWelcomeMessage);
-  socket.broadcast.emit('newUser', newUserBroadcastMessage);
+  socket.emit('createMessage', newUserWelcomeMessage);
+  socket.broadcast.emit('createMessage', newUserBroadcastMessage);
 
   // socket.emit('newEmail', {
   //     from: 'test@example.com',
@@ -37,18 +37,20 @@ io.on('connection', (socket) => {
   //
   // });
 
-  socket.on('createMessage', (data) => {
+  socket.on('createMessage', (data, callback) => {
     // var message = {
     //   to: data.to,
     //   text: data.text,
     //   createdAt: new Date().getTime()
     // };
-    console.log(data.to, data.text);
+    // console.log(data.to, data.text);
     var message = generateMessage(data.to, data.text);
     console.log('createMessage event fired by client', message );
-    io.emit('newMessage', message);
+    io.emit('createMessage', message);
     // socket.broadcast.emit('newMessage', message);
+    callback('Acknowledgement from server');
   });
+
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
