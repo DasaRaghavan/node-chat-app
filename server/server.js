@@ -18,8 +18,29 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
+  // socket.emit('newEmail', {
+  //     from: 'test@example.com',
+  //     sub: 'emit newEmail event from server',
+  //     createdAt: 12345
+  // });
+  // socket.on('createEmail', (data) => {
+  //   console.log('createEmail event fired by client', data);
+  // });
+
+  socket.on('createMessage', (data) => {
+    var message = {
+      to: data.to,
+      text: data.text,
+      createdAt: new Date().getTime()
+    }
+    // console.log('createMessage event fired by client', message );
+    socket.emit('newMessage', message);
+  });
+
+
 
 });
+
 
 
 server.listen(port, () => {
