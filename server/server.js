@@ -6,6 +6,8 @@ const http = require('http');
 const socketIO = require('socket.io');
 
 const port = process.env.PORT || 3000;
+// const {newUserWelcomeMessage, newUserBroadcastMessage} = require('./utils/message.js')
+var {generateMessage} = require('./utils/message.js');
 
 var app = express();
 var server = http.createServer(app);
@@ -15,14 +17,9 @@ app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
   console.log('New user connected');
-
-  var newUserWelcomeMessage = {
-    text: 'Welcome to the chat app'
-  };
-  var newUserBroadcastMessage = {
-    text: 'New User Joined'
-  };
-
+  // console.log(newUserWelcomeMessage);
+  var newUserWelcomeMessage = generateMessage('Admin', 'Welcome to the chat app');
+  var newUserBroadcastMessage = generateMessage('Admin', 'New user joined');
   socket.emit('newUser', newUserWelcomeMessage);
   socket.broadcast.emit('newUser', newUserBroadcastMessage);
 
@@ -41,12 +38,13 @@ io.on('connection', (socket) => {
   // });
 
   socket.on('createMessage', (data) => {
-    var message = {
-      to: data.to,
-      text: data.text,
-      createdAt: new Date().getTime()
-    };
-
+    // var message = {
+    //   to: data.to,
+    //   text: data.text,
+    //   createdAt: new Date().getTime()
+    // };
+    console.log(data.to, data.text);
+    var message = generateMessage(data.to, data.text);
     console.log('createMessage event fired by client', message );
     io.emit('newMessage', message);
     // socket.broadcast.emit('newMessage', message);
