@@ -48,7 +48,7 @@ io.on('connection', (socket) => {
     console.log('createMessage event fired by client', message );
     io.emit('createMessage', message);
     // socket.broadcast.emit('createMessage', message);
-    callback('Acknowledgement from server');
+    callback();
   });
 
   socket.on('createLocation', (locationData, callback) => {

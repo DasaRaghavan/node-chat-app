@@ -24,11 +24,12 @@ socket.on('connect', function () {
 //   console.log('Message from server', msg);
 // });
 
+var messageBox = jQuery('[name=message]');
+
 socket.on('createMessage', function (msg) {
   console.log('Message from server', msg);
   var li = jQuery('<li></li>');
   li.text(`${msg.from}: ${msg.text}`);
-
   jQuery('#messages').append(li);
 });
 
@@ -52,9 +53,9 @@ socket.on('disconnect', function () {
 
     socket.emit('createMessage', {
       to: 'User',
-      text: jQuery('[name=message]').val()
+      text: messageBox.val()
     }, function(ack) {
-
+        text: messageBox.val(ack);
     });
   });
 
@@ -64,9 +65,11 @@ socket.on('disconnect', function () {
     if (!navigator.geolocation) {
       return alert('Navigator Geolocation not available');
     }
+    locationButton.attr('disabled', 'disabled').text('Sending location...');
 
     navigator.geolocation.getCurrentPosition(function (position) {
       // console.log(position);
+      locationButton.removeAttr('disabled').text('Send location');
       socket.emit('createLocation', {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude
@@ -74,6 +77,7 @@ socket.on('disconnect', function () {
         console.log(message);
       });
     }, function () {
+      locationButton.removeAttr('disabled').text('Send location');
       alert('geolocation prevented. Permission denied.')
     });
   });
