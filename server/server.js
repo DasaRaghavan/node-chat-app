@@ -7,7 +7,7 @@ const socketIO = require('socket.io');
 
 const port = process.env.PORT || 3000;
 // const {newUserWelcomeMessage, newUserBroadcastMessage} = require('./utils/message.js')
-var {generateMessage} = require('./utils/message.js');
+var {generateMessage, generateLocationMessage} = require('./utils/message.js');
 
 var app = express();
 var server = http.createServer(app);
@@ -47,8 +47,19 @@ io.on('connection', (socket) => {
     var message = generateMessage(data.to, data.text);
     console.log('createMessage event fired by client', message );
     io.emit('createMessage', message);
-    // socket.broadcast.emit('newMessage', message);
+    // socket.broadcast.emit('createMessage', message);
     callback('Acknowledgement from server');
+  });
+
+  socket.on('createLocation', (locationData, callback) => {
+    var location = {
+      lat: locationData.latitude,
+      long: locationData.longitude
+    }
+    console.log(location);
+    // io.emit('createMessage', generateMessage('User', `${location.lat}, ${location.long}`));
+    io.emit('createLocationMessage', generateLocationMessage('User', location.lat, location.long));
+    callback('createLocationMessage received by server');
   });
 
   socket.on('disconnect', () => {

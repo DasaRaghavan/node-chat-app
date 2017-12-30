@@ -7,13 +7,18 @@ var generateMessage = ((from, text) => {
   return message;
 });
 
-var newUserWelcomeMessage = {
-  text: 'Welcome to the chat app'
-};
-var newUserBroadcastMessage = {
-  text: 'New User Joined'
-};
+var generateLocationMessage = ((from, lat, long) => {
+  var message = {
+    from,
+    lat,
+    long,
+    url: `https://www.google.com/maps/search/${lat},${long}`
+  };
+  return message;
+});
+
+
 
 // module.exports = {generateMessage, newUserWelcomeMessage, newUserBroadcastMessage};
 
-module.exports = {generateMessage}
+module.exports = {generateMessage, generateLocationMessage};

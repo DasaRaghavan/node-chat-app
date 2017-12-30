@@ -32,17 +32,48 @@ socket.on('createMessage', function (msg) {
   jQuery('#messages').append(li);
 });
 
+socket.on('createLocationMessage', function (msg) {
+  console.log('LocationMessage from server this one ==>', msg);
+  var li = jQuery('<li></li>');
+  var a = jQuery('<a target="_blank">My Current Location</a>');
+  li.text(`${msg.from}: `);
+  a.attr('id', 'location-anchor');
+  a.attr('href', msg.url);
+  li.append(a);
+  jQuery('#messages').append(li);
+});
+
 socket.on('disconnect', function () {
   console.log('disconnected from server');
 });
 
-jQuery('#message-form').on('submit', function(e) {
-  e.preventDefault();
+  jQuery('#message-form').on('submit', function(e) {
+    e.preventDefault();
 
-  socket.emit('createMessage', {
-    to: 'User',
-    text: jQuery('[name=message]').val()
-  }, function(ack) {
+    socket.emit('createMessage', {
+      to: 'User',
+      text: jQuery('[name=message]').val()
+    }, function(ack) {
 
+    });
   });
-});
+
+  var locationButton = jQuery('#send-location');
+
+  locationButton.on('click', function() {
+    if (!navigator.geolocation) {
+      return alert('Navigator Geolocation not available');
+    }
+
+    navigator.geolocation.getCurrentPosition(function (position) {
+      // console.log(position);
+      socket.emit('createLocation', {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      }, function (message) {
+        console.log(message);
+      });
+    }, function () {
+      alert('geolocation prevented. Permission denied.')
+    });
+  });
