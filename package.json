@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server/server.js",
     "test": "mocha server/**/*.test.js",
-    "test-watch":"nodemon --exec 'npm test'"
+    "test-watch": "nodemon --exec 'npm test'"
   },
   "engines": {
     "node": "8.9.0"
@@ -17,7 +17,8 @@
     "expect": "^22.0.3",
     "express": "^4.16.2",
     "mocha": "^4.0.1",
-    "nodemon": "^1.14.3",
+    "moment": "^2.20.1",
+    "nodemon": "^1.14.6",
     "socket.io": "^2.0.4"
   }
 }

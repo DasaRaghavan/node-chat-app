@@ -29,7 +29,8 @@ var messageBox = jQuery('[name=message]');
 socket.on('createMessage', function (msg) {
   console.log('Message from server', msg);
   var li = jQuery('<li></li>');
-  li.text(`${msg.from}: ${msg.text}`);
+  var time = moment(msg.createdAt).format('h:mm:s.SSS a');
+  li.text(`${msg.from} ${time}: ${msg.text}`);
   jQuery('#messages').append(li);
 });
 
@@ -37,7 +38,8 @@ socket.on('createLocationMessage', function (msg) {
   console.log('LocationMessage from server this one ==>', msg);
   var li = jQuery('<li></li>');
   var a = jQuery('<a target="_blank">My Current Location</a>');
-  li.text(`${msg.from}: `);
+  var time = moment(msg.createdAt).format('h:mm:s.SSS a');
+  li.text(`${msg.from} ${time}: ${msg.from}: `);
   a.attr('id', 'location-anchor');
   a.attr('href', msg.url);
   li.append(a);
