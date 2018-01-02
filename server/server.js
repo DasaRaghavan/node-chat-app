@@ -7,6 +7,7 @@ const socketIO = require('socket.io');
 
 const port = process.env.PORT || 3000;
 // const {newUserWelcomeMessage, newUserBroadcastMessage} = require('./utils/message.js')
+const {isRealString} = require('./utils/validate');
 var {generateMessage, generateLocationMessage} = require('./utils/message.js');
 
 var app = express();
@@ -36,6 +37,16 @@ io.on('connection', (socket) => {
   // socket.on('connect', () => {
   //
   // });
+
+  socket.on('join', (params, callback) => {
+    //validate if params are real
+    // console.log(params);
+    if (!isRealString(params.name) || !isRealString(params.room)) {
+      callback("Name and Room Name are required!")
+    }
+    callback();
+
+  });
 
   socket.on('createMessage', (data, callback) => {
     // var message = {

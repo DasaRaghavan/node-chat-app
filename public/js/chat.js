@@ -26,29 +26,39 @@ function scrollToBottom() {
 }
 
 socket.on('connect', function () {
-  // console.log('Connected to server');
+  console.log('Connected to server');
+  var params = jQuery.deparam(window.location.search);
+  // console.log(params);
 
+  socket.emit('join', params, function(err) {
+    if(err) {
+      alert(err);
+      window.location.href = '/';
+    } else {
+      console.log("success");
+    }
+  });
 });
-// socket.on('newEmail', function(data) {
-//   console.log('newEmail event received from server', data);
-// });
+//comments
+  // socket.on('newEmail', function(data) {
+  //   console.log('newEmail event received from server', data);
+  // });
+  // socket.emit('createEmail', {
+  //   to: 'fromClient@example.com',
+  //   sub: 'emit createEmail event from client',
+  //   scheduleTime: 123
+  // });
+  // socket.emit('createMessage', {
+  //   to: 'messageServer@example.com',
+  //   text: 'emit new createMessage event from client',
+  // }, function (ack) {
+  //   console.log('Got it!', ack);
+  // });
+  // socket.on('newUser', function (msg) {
+  //   console.log('Message from server', msg);
+  // });
 
-// socket.emit('createEmail', {
-//   to: 'fromClient@example.com',
-//   sub: 'emit createEmail event from client',
-//   scheduleTime: 123
-// });
 
-// socket.emit('createMessage', {
-//   to: 'messageServer@example.com',
-//   text: 'emit new createMessage event from client',
-// }, function (ack) {
-//   console.log('Got it!', ack);
-// });
-
-// socket.on('newUser', function (msg) {
-//   console.log('Message from server', msg);
-// });
 
 var messageBox = jQuery('[name=message]');
 
@@ -96,7 +106,7 @@ socket.on('createLocationMessage', function (msg) {
 });
 
 socket.on('disconnect', function () {
-  // console.log('disconnected from server');
+  console.log('disconnected from server');
 });
 
   jQuery('#message-form').on('submit', function(e) {
