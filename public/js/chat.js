@@ -126,11 +126,12 @@ socket.on('disconnect', function () {
   jQuery('#message-form').on('submit', function(e) {
     e.preventDefault();
     var params = jQuery.deparam(window.location.search);
+
     socket.emit('createMessage', {
       to: params.name,
-      text: messageBox.val()
-    }, function(ack) {
-        text: messageBox.val(ack);
+      text: jQuery('[name=message]').val()
+    }, function () {
+        jQuery('[name=message]').val('');
     });
   });
 

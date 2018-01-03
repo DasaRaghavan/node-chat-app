@@ -60,17 +60,26 @@ io.on('connection', (socket) => {
   });
 
   socket.on('createMessage', (data, callback) => {
+    var user = users.getUser(socket.id);
+
     // var message = {
     //   to: data.to,
     //   text: data.text,
     //   createdAt: new Date().getTime()
     // };
     // console.log(data.to, data.text);
-    var message = generateMessage(data.to, data.text);
-    console.log('createMessage event fired by client', message );
-    io.emit('createMessage', message);
-    // socket.broadcast.emit('createMessage', message);
-    callback();
+    if (user && isRealString(data.text)){
+      var message = generateMessage(user.name, data.text);
+      console.log('createMessage event fired by client', message );
+      io.to(user.room).emit('createMessage', message);
+      callback();
+    }
+      // socket.broadcast.emit('createMessage', message);
+    // } else {
+    //   callback();
+    // }
+
+
   });
 
   socket.on('createLocation', (locationData, callback) => {
